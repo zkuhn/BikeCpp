@@ -35,10 +35,15 @@ public:
 
 	float getX();
 	float getY();
+        //uses basic trig to calculate turning radius based on steering angle
 	float getTurningRadius(float steering_angle);
 	float getFrontWheelCircumfrence();
 
 	float getCircumfrenceForRadius(float radius);
+	/*
+	 * Take a heading of an arbitrary number of radians and normalize it between -M_PI and M_PI
+	 */
+	float normalizeHeading(float heading);
 
 protected:
 	float getFrontWheelTravel(int encoder_ticks);

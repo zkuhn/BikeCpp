@@ -62,11 +62,6 @@ float BikeKinematics::getCircumfrenceForRadius(float radius) {
 	return radius * 2 * (float)M_PI;
 }
 
-//return the slope, pre-check for x2 != x1 to avoid undef
-float getSlope(int x1, int y1, int x2, int y2) {
-	return (float)(y2 - y1) / (x2 - x1);
-}
-
 
 estimated_pose BikeKinematics::estimate(float time, float steering_angle, int encoder_ticks, float angular_velocity) {
 
@@ -110,7 +105,7 @@ estimated_pose BikeKinematics::estimate(float time, float steering_angle, int en
 	// take the new heading mod 2 pi in case we looped around.
 
 
-	this->currentHeading = fmod (newHeading, M_PI * 2);
+	this->currentHeading = normalizeHeading(newHeading);
 	this->currentRearHubX += travelVectorX;
 	this->currentRearHubY += travelVectorY;
 
@@ -119,6 +114,20 @@ estimated_pose BikeKinematics::estimate(float time, float steering_angle, int en
 
 
 	//std::cout << "front wheel distance travelled was" << totalDistance;
+}
+
+/*
+ * Take a heading of an arbitrary number of radians and normalize it between -M_PI and M_PI
+ */
+float BikeKinematics::normalizeHeading(float heading) {
+    float returnHeading = fmod (heading, M_PI * 2);
+    if(returnHeading > M_PI){
+        return returnHeading - 2 * M_PI;
+    }
+    if (returnHeading <= -M_PI) {
+        return returnHeading + 2 * M_PI;
+    }
+    return returnHeading;
 }
 
 float BikeKinematics::getTurningRadius(float steering_angle)
