@@ -7,4 +7,8 @@ struct estimated_pose {
 
 	void printPos();
 
+	estimated_pose();
+        estimated_pose( estimated_pose && );
+	estimated_pose& operator=(const estimated_pose&);
+
 };
