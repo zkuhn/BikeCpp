@@ -61,6 +61,7 @@ namespace {
         //we could only expect the values to be close.
         ASSERT_NEAR(bk3.normalizeHeading(M_PI),M_PI, 0.00001f) ;
         ASSERT_NEAR(bk3.normalizeHeading(-M_PI),M_PI, 0.00001f) ;
+        ASSERT_NEAR(bk3.normalizeHeading(M_PI* 3/2),-M_PI/2, 0.00001f) ;
 
     }
 
