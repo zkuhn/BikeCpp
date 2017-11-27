@@ -120,14 +120,23 @@ estimated_pose BikeKinematics::estimate(float time, float steering_angle, int en
  * Take a heading of an arbitrary number of radians and normalize it between -M_PI and M_PI
  */
 float BikeKinematics::normalizeHeading(float heading) {
-    float returnHeading = fmod (heading, M_PI * 2);
+    if(heading <= M_PI && heading > -M_PI) {
+        return heading;
+    }
+    if (heading > M_PI) {
+        return normalizeHeading(heading - 2*M_PI);
+    }
+    if(heading <= -M_PI) {
+        return normalizeHeading(heading + 2*M_PI);
+    }
+    /*float returnHeading = fmod (heading, M_PI * 2);
     if(returnHeading > M_PI){
         return returnHeading - 2 * M_PI;
     }
     if (returnHeading <= -M_PI) {
         return returnHeading + 2 * M_PI;
     }
-    return returnHeading;
+    return returnHeading;*/
 }
 
 float BikeKinematics::getTurningRadius(float steering_angle)
