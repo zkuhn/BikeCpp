@@ -62,7 +62,23 @@ float BikeKinematics::getCircumfrenceForRadius(float radius) {
 	return radius * 2 * (float)M_PI;
 }
 
-
+/**
+ * To find the new heading and distance moved, we need to trace the center of the 
+ * rear hub along a circular arc, the same number of radians that the front
+ * wheel travelled around its crcular arc. 
+ *
+ * After finding the front turning radius, and then converting distance travveled to
+ * radians, we find the rear hub circle of travel radius, and calculate a new position 
+ * moved that many radians. The tangent formula tan = opp / adj gives us the rear wheel
+ * radius when we take the hub to hub distance (opposite) and divide  it by the inverse
+ * tangent.
+ *
+ * Heading will simply be old heading plus the turned radians.
+ *
+ * new X and Y position will simple formula based on starting position and updated circle following.
+ * some care is taken since direction of travel is tangent to the center of rotation coordinate
+ * system we use.
+ */
 estimated_pose BikeKinematics::estimate(float time, float steering_angle, int encoder_ticks, float angular_velocity) {
 
 	float totalDistance = this->getFrontWheelTravel(encoder_ticks);
@@ -118,17 +134,17 @@ estimated_pose BikeKinematics::estimate(float time, float steering_angle, int en
 
 /*
  * Take a heading of an arbitrary number of radians and normalize it between -M_PI and M_PI
+ * make sure to explicitly cast M_PI to float, as the double val is slightly larger than the float val 
+ * of PI
  */
 float BikeKinematics::normalizeHeading(float heading) {
-    if(heading <= M_PI && heading > -M_PI) {
-        return heading;
+    if (heading > (float)M_PI) {
+        return normalizeHeading(heading - 2*(float)M_PI);
     }
-    if (heading > M_PI) {
-        return normalizeHeading(heading - 2*M_PI);
+    if(heading <= (float)-M_PI) {
+        return normalizeHeading(heading + 2*(float)M_PI);
     }
-    if(heading <= -M_PI) {
-        return normalizeHeading(heading + 2*M_PI);
-    }
+    return heading;
     /*float returnHeading = fmod (heading, M_PI * 2);
     if(returnHeading > M_PI){
         return returnHeading - 2 * M_PI;
@@ -139,6 +155,17 @@ float BikeKinematics::normalizeHeading(float heading) {
     return returnHeading;*/
 }
 
+/**
+ * In trig, SOH CAH TOH - sin is the opposite divided by hypotenuse
+ * since we are looking for hypotenuse (radius of turn), and we have
+ * opposite (hub to hub distance) O * H/O = H 
+ * but H/O = 1/sin (steering angle) so we have our formula
+ *
+ * You can see that the steering angle is the same as the angle 
+ * from the center of turning between the front and back hubs because
+ * the tangent line of the front turning angle is perpendicular to radius
+ * 
+ */
 float BikeKinematics::getTurningRadius(float steering_angle)
 {
 	float sinSteer = sin(steering_angle);

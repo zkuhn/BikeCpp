@@ -59,8 +59,8 @@ namespace {
         }
         //Note that these tests cannot be expected to pass because floating point math can slightly alter the values
         //we could only expect the values to be close.
-        //ASSERT_EQ(bk3.normalizeHeading(M_PI),M_PI) ;
-        //ASSERT_EQ(bk3.normalizeHeading(-M_PI),M_PI) ;
+        ASSERT_NEAR(bk3.normalizeHeading(M_PI),M_PI, 0.00001f) ;
+        ASSERT_NEAR(bk3.normalizeHeading(-M_PI),M_PI, 0.00001f) ;
 
     }
 
