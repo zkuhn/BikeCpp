@@ -79,7 +79,7 @@ float BikeKinematics::getCircumfrenceForRadius(float radius) {
  * some care is taken since direction of travel is tangent to the center of rotation coordinate
  * system we use.
  */
-estimated_pose BikeKinematics::estimate(float time, float steering_angle, int encoder_ticks, float angular_velocity) {
+estimated_pose  BikeKinematics::estimate(float time, float steering_angle, int encoder_ticks, float angular_velocity) {
 
 	float totalDistance = this->getFrontWheelTravel(encoder_ticks);
 
@@ -87,8 +87,8 @@ estimated_pose BikeKinematics::estimate(float time, float steering_angle, int en
 	if (steering_angle <= 0.001 && steering_angle >= -.001) {
 		this->currentRearHubX += cos(currentHeading) * totalDistance;
 		this->currentRearHubY += sin(currentHeading) * totalDistance;
-		
-		return getPose();
+	
+		return  getPose();
 	}
 
 	//std::cout << std::fixed << std::setw(11) << std::setprecision(6)
@@ -126,7 +126,7 @@ estimated_pose BikeKinematics::estimate(float time, float steering_angle, int en
 	this->currentRearHubY += travelVectorY;
 
 	
-	return getPose();
+        return getPose();
 
 
 	//std::cout << "front wheel distance travelled was" << totalDistance;

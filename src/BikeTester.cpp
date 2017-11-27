@@ -19,12 +19,11 @@ BikeTester::~BikeTester()
 
 void BikeTester::testAll() {
 
-	estimated_pose outputPose;
 	BikeKinematics bk(.2f, .2f, 1.0f);
 	cout << "testing a bike kinematic " << endl;
 	//cout << bk.getX() << " , " << bk.getY() << endl;
 
-	outputPose = bk.estimate(0, 0.2f, 200, 0.01f);
+	estimated_pose outputPose = bk.estimate(0, 0.2f, 200, 0.01f);
 	
 	outputPose.printPos();
 

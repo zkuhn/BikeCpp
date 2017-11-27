@@ -19,6 +19,9 @@ namespace {
         ASSERT_GT(ep.x, 0.9f);
         ASSERT_GT(ep.y, -0.1f);
     }
+
+    //Test a bunch of functions that need to work to drive the bike in a big left hand circle
+    //NOTE: found the ASSERT_NEAR function after this test was written. Could be updated.
     TEST(CircleTest, ForwardLeftCircle){
         BikeKinematics bk3(0.2f, 0.2f, 1.0f);
 
@@ -31,7 +34,7 @@ namespace {
         float wheelRevolutions = frontWheelTravel / wheelCircumfrence;
 
         //get the estimated pose after completing a left circle. it should be close to {0,0,0}
-        estimated_pose returnPose = bk3.estimate(0.01f, steering_angle, (int)(wheelRevolutions * 512) , 0.01f);
+        const estimated_pose & returnPose = bk3.estimate(0.01f, steering_angle, (int)(wheelRevolutions * 512) , 0.01f);
         // X should be close to zero
         ASSERT_GT(returnPose.x, -0.01f);
         ASSERT_LT(returnPose.x,  0.01f);
